@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Chỉnh sửa thông tin</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f3e8ff, #ffffff);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            width: 500px;
+            max-width: 100%;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #7c3aed;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
+
+        .username-box {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 10px;
+            color: #666;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button,
+        .cancel-button {
+            flex: 1;
+            padding: 13px;
+            border: none;
+            border-radius: 10px;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            font-size: 15px;
+        }
+
+        .save-button {
+            background: #7c3aed;
+            color: white;
+        }
+
+        .save-button:hover {
+            background: #6d28d9;
+        }
+
+        .cancel-button {
+            background: #eee;
+            color: #333;
+        }
+
+        .cancel-button:hover {
+            background: #ddd;
+        }
+
+        .error {
+            color: red;
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .current-avatar {
+            margin-bottom: 10px;
+        }
+
+        .current-avatar img {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>✏️ Chỉnh sửa thông tin</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <!-- HỌ VÀ TÊN -->
+        <div class="form-group">
+            <label>👤 Họ và tên</label>
+
+            {{ form.full_name }}
+
+            {% if form.full_name.errors %}
+                <div class="error">
+                    {{ form.full_name.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- NGÀY SINH -->
+        <div class="form-group">
+            <label>🎂 Ngày sinh</label>
+
+            {{ form.date_of_birth }}
+
+            {% if form.date_of_birth.errors %}
+                <div class="error">
+                    {{ form.date_of_birth.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- SỐ ĐIỆN THOẠI -->
+        <div class="form-group">
+            <label>📱 Số điện thoại</label>
+
+            {{ form.phone }}
+
+            {% if form.phone.errors %}
+                <div class="error">
+                    {{ form.phone.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- EMAIL -->
+        <div class="form-group">
+            <label>📧 Email</label>
+
+            {{ form.email }}
+
+            {% if form.email.errors %}
+                <div class="error">
+                    {{ form.email.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- TÊN ĐĂNG NHẬP -->
+        <div class="form-group">
+            <label>🔑 Tên đăng nhập</label>
+
+            <div class="username-box">
+                {{ request.user.username }}
+            </div>
+        </div>
+
+
+        <!-- AVATAR -->
+        <div class="form-group">
+            <label>🖼️ Ảnh đại diện</label>
+
+            {% if profile.avatar %}
+                <div class="current-avatar">
+                    <img src="{{ profile.avatar.url }}" alt="Ảnh đại diện">
+                </div>
+            {% endif %}
+
+            {{ form.avatar }}
+
+            {% if form.avatar.errors %}
+                <div class="error">
+                    {{ form.avatar.errors }}
+                </div>
+            {% endif %}
+        </div>
+
+
+        <!-- BUTTON -->
+        <div class="button-group">
+
+            <button type="submit" class="save-button">
+                💾 Lưu thay đổi
+            </button>
+
+            <a href="{% url 'profile' %}" class="cancel-button">
+                Hủy
+            </a>
+
+        </div>
+
+    </form>
+
+</div>
+
+</body>
+</html>

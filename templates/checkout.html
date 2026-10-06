@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh toán - MusicStore</title>
+
+```
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #f8f7fc;
+        margin: 0;
+        color: #333;
+    }
+
+    header {
+        background: #5b2c83;
+        color: white;
+        padding: 20px 8%;
+    }
+
+    header h2 {
+        margin: 0;
+    }
+
+    .container {
+        width: 85%;
+        max-width: 1100px;
+        margin: 40px auto;
+    }
+
+    .box {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+        color: #5b2c83;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: #5b2c83;
+    }
+
+    /* =========================
+       SẢN PHẨM
+    ========================= */
+
+    .product {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .product:last-child {
+        border-bottom: none;
+    }
+
+    .product img {
+        width: 100px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-info h3 {
+        margin: 0 0 8px;
+        color: #333;
+    }
+
+    .price {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    .quantity {
+        color: #666;
+    }
+
+    .subtotal {
+        font-weight: bold;
+        color: #5b2c83;
+        white-space: nowrap;
+    }
+
+    .total {
+        text-align: right;
+        font-size: 24px;
+        color: #5b2c83;
+        margin-top: 25px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    label {
+        display: block;
+        margin-top: 15px;
+        margin-bottom: 7px;
+        font-weight: bold;
+        color: #444;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    textarea {
+        width: 100%;
+        padding: 13px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="tel"]:focus,
+    textarea:focus {
+        border-color: #5b2c83;
+        box-shadow: 0 0 0 2px rgba(91, 44, 131, 0.08);
+    }
+
+    textarea {
+        height: 100px;
+        resize: vertical;
+    }
+
+    /* =========================
+       PHƯƠNG THỨC THANH TOÁN
+    ========================= */
+
+    .payment-title {
+        margin-top: 30px;
+        margin-bottom: 15px;
+    }
+
+    .payment-option {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 18px;
+        margin: 12px 0;
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+        background: #fff;
+    }
+
+    .payment-option:hover {
+        border-color: #8e5bb5;
+        background: #faf7fd;
+    }
+
+    .payment-option input[type="radio"] {
+        width: 20px;
+        height: 20px;
+        accent-color: #5b2c83;
+        cursor: pointer;
+        flex-shrink: 0;
+    }
+
+    .payment-option:has(input[type="radio"]:checked) {
+        border-color: #5b2c83;
+        background: #f7f0fc;
+    }
+
+    .payment-icon {
+        font-size: 30px;
+        width: 45px;
+        text-align: center;
+    }
+
+    .payment-text {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .payment-text strong {
+        color: #333;
+        font-size: 17px;
+    }
+
+    .payment-text span {
+        color: #777;
+        font-size: 14px;
+        font-weight: normal;
+    }
+
+    /* =========================
+       THÔNG BÁO CHUYỂN KHOẢN
+    ========================= */
+
+    .bank-note {
+        display: none;
+        margin-top: 15px;
+        padding: 15px;
+        background: #f4edfa;
+        border-left: 4px solid #5b2c83;
+        border-radius: 8px;
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .bank-note strong {
+        color: #5b2c83;
+    }
+
+    /* =========================
+       LỖI
+    ========================= */
+
+    .error {
+        background: #ffecec;
+        color: #d63031;
+        border: 1px solid #ffb3b3;
+        padding: 12px 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    /* =========================
+       BUTTON
+    ========================= */
+
+    .btn {
+        width: 100%;
+        padding: 15px;
+        margin-top: 25px;
+        background: #5b2c83;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .btn:hover {
+        background: #472066;
+    }
+
+    /* =========================
+       BACK
+    ========================= */
+
+    .back {
+        display: inline-block;
+        margin-bottom: 20px;
+        color: #5b2c83;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .back:hover {
+        text-decoration: underline;
+    }
+
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+        .container {
+            width: 95%;
+            margin: 25px auto;
+        }
+
+        .box {
+            padding: 20px;
+        }
+
+        .product {
+            gap: 12px;
+        }
+
+        .product img {
+            width: 75px;
+            height: 65px;
+        }
+
+        .subtotal {
+            font-size: 14px;
+        }
+
+        .total {
+            font-size: 20px;
+        }
+
+        .payment-option {
+            padding: 14px;
+        }
+    }
+</style>
+```
+
+</head>
+
+<body>
+
+<header>
+    <h2>🎵 MusicStore</h2>
+</header>
+
+<div class="container">
+
+```
+<!-- QUAY LẠI GIỎ HÀNG -->
+
+<a href="{% url 'cart' %}" class="back">
+    ← Quay lại giỏ hàng
+</a>
+
+
+<!-- =========================
+     SẢN PHẨM
+========================= -->
+
+<div class="box">
+
+    <h1>💳 Thanh toán</h1>
+
+    <h2>🛒 Sản phẩm trong đơn hàng</h2>
+
+
+    {% for item in products %}
+
+    <div class="product">
+
+        <img
+            src="{{ item.product.image }}"
+            alt="{{ item.product.name }}"
+        >
+
+
+        <div class="product-info">
+
+            <h3>
+                {{ item.product.name }}
+            </h3>
+
+
+            <p>
+                Giá:
+
+                <span class="price">
+                    {{ item.product.price }} VNĐ
+                </span>
+            </p>
+
+
+            <p class="quantity">
+                Số lượng: {{ item.quantity }}
+            </p>
+
+        </div>
+
+
+        <div class="subtotal">
+            {{ item.subtotal }} VNĐ
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+
+    <div class="total">
+        Tổng tiền: {{ total }} VNĐ
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     THÔNG TIN NHẬN HÀNG
+========================= -->
+
+<div class="box">
+
+    <h2>📦 Thông tin nhận hàng</h2>
+
+
+    {% if error %}
+
+    <div class="error">
+        ⚠️ {{ error }}
+    </div>
+
+    {% endif %}
+
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+
+        <!-- HỌ TÊN -->
+
+        <label>
+            Họ và tên
+        </label>
+
+        <input
+            type="text"
+            name="customer_name"
+            placeholder="Nhập họ và tên"
+            value="{{ request.user.profile.full_name }}"
+            required
+        >
+
+
+
+        <!-- SỐ ĐIỆN THOẠI -->
+
+        <label>
+            Số điện thoại
+        </label>
+
+        <input
+            type="tel"
+            name="phone"
+            placeholder="Nhập số điện thoại"
+            value="{{ request.user.profile.phone }}"
+            required
+        >
+
+
+
+        <!-- ĐỊA CHỈ -->
+
+        <label>
+            Địa chỉ nhận hàng
+        </label>
+
+        <textarea
+            name="address"
+            placeholder="Nhập địa chỉ nhận hàng"
+            required
+        ></textarea>
+
+        <label>
+            Ghi chú
+        </label>
+
+        <textarea
+            name="note"
+            placeholder="Ghi chú cho đơn hàng (không bắt buộc)"
+        ></textarea>
+
+
+
+        <!-- =========================
+             PHƯƠNG THỨC THANH TOÁN
+        ========================= -->
+
+        <h2 class="payment-title">
+            💳 Phương thức thanh toán
+        </h2>
+
+
+        <!-- TIỀN MẶT -->
+
+        <label class="payment-option">
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="cod"
+                checked
+                onchange="changePayment()"
+            >
+
+            <div class="payment-icon">
+                💵
+            </div>
+
+            <div class="payment-text">
+
+                <strong>
+                    Tiền mặt khi nhận hàng
+                </strong>
+
+                <span>
+                    Thanh toán trực tiếp khi nhận sản phẩm
+                </span>
+
+            </div>
+
+        </label>
+
+
+
+        <!-- CHUYỂN KHOẢN -->
+
+        <label class="payment-option">
+
+            <input
+                type="radio"
+                name="payment_method"
+                value="bank"
+                onchange="changePayment()"
+            >
+
+            <div class="payment-icon">
+                🏦
+            </div>
+
+            <div class="payment-text">
+
+                <strong>
+                    Chuyển khoản ngân hàng
+                </strong>
+
+                <span>
+                    Thanh toán bằng mã QR ngân hàng
+                </span>
+
+            </div>
+
+        </label>
+
+
+
+        <!-- THÔNG BÁO BANK -->
+
+        <div
+            class="bank-note"
+            id="bankNote"
+        >
+
+            🏦 <strong>Thanh toán chuyển khoản</strong>
+
+            <br>
+
+            Sau khi bấm <strong>Đặt hàng</strong>,
+            hệ thống sẽ chuyển bạn đến trang thanh toán
+            và hiển thị <strong>mã QR</strong>.
+
+            <br>
+
+            Bạn chỉ cần dùng ứng dụng ngân hàng để
+            quét mã QR và thực hiện thanh toán.
+
+        </div>
+
+
+
+        <!-- BUTTON -->
+
+        <button
+            type="submit"
+            class="btn"
+            id="submitBtn"
+        >
+            🛍️ Đặt hàng
+        </button>
+
+
+    </form>
+
+</div>
+
+</div>
+
+<script>
+
+    function changePayment() {
+
+        const bankRadio =
+            document.querySelector(
+                'input[name="payment_method"][value="bank"]'
+            );
+
+        const bankNote =
+            document.getElementById("bankNote");
+
+        const submitBtn =
+            document.getElementById("submitBtn");
+
+
+        if (bankRadio.checked) {
+
+            bankNote.style.display = "block";
+
+            submitBtn.innerHTML =
+                "🏦 Tiếp tục thanh toán";
+
+        } else {
+
+            bankNote.style.display = "none";
+
+            submitBtn.innerHTML =
+                "🛍️ Đặt hàng";
+
+        }
+
+    }
+
+</script>
+
+</body>
+</html>

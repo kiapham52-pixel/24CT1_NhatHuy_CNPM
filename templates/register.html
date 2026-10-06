@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng ký - MusicStore</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f5e6ff,
+                    #ffffff
+                );
+
+            min-height: 100vh;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+        }
+
+
+        .register-box {
+
+            width: 450px;
+
+            max-width: 92%;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 20px;
+
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.15);
+        }
+
+
+        .title {
+
+            text-align: center;
+
+            color: #5b2c83;
+
+            margin-bottom: 25px;
+        }
+
+
+        .title h1 {
+
+            margin-bottom: 8px;
+        }
+
+
+        .form-group {
+
+            margin-bottom: 18px;
+        }
+
+
+        .form-group label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+
+            color: #5b2c83;
+        }
+
+
+        .form-control {
+
+            width: 100%;
+
+            padding: 12px 15px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+
+        .form-control:focus {
+
+            border-color: #8e44ad;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(142, 68, 173, 0.12);
+        }
+
+
+        .error {
+
+            color: #e74c3c;
+
+            font-size: 13px;
+
+            margin-top: 5px;
+        }
+
+
+        .avatar-preview {
+
+            display: none;
+
+            width: 120px;
+
+            height: 120px;
+
+            object-fit: cover;
+
+            border-radius: 50%;
+
+            border: 4px solid #8e44ad;
+
+            margin: 15px auto;
+        }
+
+
+        .register-button {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 25px;
+
+            background: #5b2c83;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 10px;
+        }
+
+
+        .register-button:hover {
+
+            background: #7d3ca8;
+        }
+
+
+        .login-link {
+
+            text-align: center;
+
+            margin-top: 20px;
+        }
+
+
+        .login-link a {
+
+            color: #5b2c83;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+
+        .back-home {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 15px;
+
+            color: #666;
+
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="register-box">
+
+
+    <div class="title">
+
+        <h1>🎵 MusicStore</h1>
+
+        <p>Tạo tài khoản mới</p>
+
+    </div>
+
+
+    <form
+        method="POST"
+        enctype="multipart/form-data"
+    >
+
+        {% csrf_token %}
+
+
+        <!-- HỌ VÀ TÊN -->
+
+        <div class="form-group">
+
+            <label>
+                Họ và tên
+            </label>
+
+            {{ form.full_name }}
+
+            {% for error in form.full_name.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- NGÀY SINH -->
+
+        <div class="form-group">
+
+            <label>
+                Ngày sinh
+            </label>
+
+            {{ form.date_of_birth }}
+
+            {% for error in form.date_of_birth.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="form-group">
+
+            <label>
+                📧 Email
+            </label>
+
+            {{ form.email }}
+
+            {% for error in form.email.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- USERNAME -->
+
+        <div class="form-group">
+
+            <label>
+                Tên đăng nhập
+            </label>
+
+            {{ form.username }}
+
+            {% for error in form.username.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- PASSWORD -->
+
+        <div class="form-group">
+
+            <label>
+                Mật khẩu
+            </label>
+
+            {{ form.password1 }}
+
+            {% for error in form.password1.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- PASSWORD 2 -->
+
+        <div class="form-group">
+
+            <label>
+                Nhập lại mật khẩu
+            </label>
+
+            {{ form.password2 }}
+
+            {% for error in form.password2.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- AVATAR -->
+
+        <div class="form-group">
+
+            <label>
+                🖼️ Ảnh đại diện
+            </label>
+
+            {{ form.avatar }}
+
+            {% for error in form.avatar.errors %}
+
+                <div class="error">
+                    {{ error }}
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- PREVIEW -->
+
+        <img
+            id="avatarPreview"
+            class="avatar-preview"
+            alt="Xem trước avatar"
+        >
+
+
+        <button
+            type="submit"
+            class="register-button"
+        >
+            🚀 Đăng ký tài khoản
+        </button>
+
+
+    </form>
+
+
+    <div class="login-link">
+
+        Đã có tài khoản?
+
+        <a href="{% url 'login' %}">
+            Đăng nhập
+        </a>
+
+    </div>
+
+
+    <a
+        href="{% url 'home' %}"
+        class="back-home"
+    >
+        ← Quay về trang chủ
+    </a>
+
+
+</div>
+
+
+<script>
+
+    const avatarInput =
+        document.getElementById('id_avatar');
+
+    const avatarPreview =
+        document.getElementById('avatarPreview');
+
+
+    avatarInput.addEventListener(
+        'change',
+        function(event) {
+
+            const file =
+                event.target.files[0];
+
+
+            if (file) {
+
+                avatarPreview.src =
+                    URL.createObjectURL(file);
+
+                avatarPreview.style.display =
+                    'block';
+
+            } else {
+
+                avatarPreview.style.display =
+                    'none';
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+    Thông tin cá nhân - MusicStore
+</title>
+
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+
+    body {
+
+        font-family: Arial, sans-serif;
+
+        background:
+            linear-gradient(
+                135deg,
+                #f5e6ff,
+                #ffffff
+            );
+
+        min-height: 100vh;
+
+        color: #333;
+
+    }
+
+
+    /* HEADER */
+
+    header {
+
+        background: #5b2c83;
+
+        color: white;
+
+        padding: 18px 8%;
+
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+    }
+
+
+    .logo {
+
+        font-size: 28px;
+
+        font-weight: bold;
+
+    }
+
+
+    .home-link {
+
+        color: white;
+
+        text-decoration: none;
+
+        font-weight: bold;
+
+    }
+
+
+    /* CONTAINER */
+
+    .profile-container {
+
+        width: 500px;
+
+        max-width: 92%;
+
+        margin: 60px auto;
+
+    }
+
+
+    /* CARD */
+
+    .profile-card {
+
+        background: white;
+
+        border-radius: 25px;
+
+        padding: 40px;
+
+        text-align: center;
+
+        box-shadow:
+            0 10px 30px
+            rgba(0, 0, 0, 0.15);
+
+    }
+
+
+    h1 {
+
+        color: #5b2c83;
+
+        margin-bottom: 30px;
+
+    }
+
+
+    /* AVATAR */
+
+    .avatar {
+
+        width: 160px;
+
+        height: 160px;
+
+        object-fit: cover;
+
+        border-radius: 50%;
+
+        border: 5px solid #8e44ad;
+
+        display: block;
+
+        margin: 0 auto 25px;
+
+    }
+
+
+    .default-avatar {
+
+        width: 160px;
+
+        height: 160px;
+
+        border-radius: 50%;
+
+        background: #eee;
+
+        border: 5px solid #8e44ad;
+
+        display: flex;
+
+        justify-content: center;
+
+        align-items: center;
+
+        font-size: 70px;
+
+        margin: 0 auto 25px;
+
+    }
+
+
+    /* THÔNG TIN */
+
+    .info {
+
+        text-align: left;
+
+    }
+
+
+    .info-item {
+
+        background: #f8f7fc;
+
+        padding: 16px 20px;
+
+        border-radius: 12px;
+
+        margin-bottom: 15px;
+
+    }
+
+
+    .info-item strong {
+
+        color: #5b2c83;
+
+        display: inline-block;
+
+        margin-bottom: 5px;
+
+    }
+
+
+    .info-value {
+
+        color: #333;
+
+        font-size: 16px;
+
+    }
+
+
+    /* BUTTON */
+
+    .button-group {
+
+        margin-top: 25px;
+
+        display: flex;
+
+        justify-content: center;
+
+        gap: 12px;
+
+        flex-wrap: wrap;
+
+    }
+
+
+    .back-button {
+
+        display: inline-block;
+
+        padding: 12px 24px;
+
+        background: #5b2c83;
+
+        color: white;
+
+        border-radius: 25px;
+
+        text-decoration: none;
+
+        font-weight: bold;
+
+    }
+
+
+    .edit-button {
+
+        display: inline-block;
+
+        padding: 12px 24px;
+
+        background: #8e44ad;
+
+        color: white;
+
+        border-radius: 25px;
+
+        text-decoration: none;
+
+        font-weight: bold;
+
+    }
+
+
+    .back-button:hover {
+
+        background: #7d3ca8;
+
+    }
+
+
+    .edit-button:hover {
+
+        background: #a55bc5;
+
+    }
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<div class="logo">
+    🎵 MusicStore
+</div>
+
+
+<a
+    href="{% url 'home' %}"
+    class="home-link"
+>
+    🏠 Trang chủ
+</a>
+
+</header>
+
+<div class="profile-container">
+
+<div class="profile-card">
+
+
+    <h1>
+        👤 Thông tin cá nhân
+    </h1>
+
+
+    <!-- AVATAR -->
+
+    {% if profile.avatar %}
+
+        <img
+            src="{{ profile.avatar.url }}"
+            class="avatar"
+            alt="Ảnh đại diện"
+        >
+
+    {% else %}
+
+        <div class="default-avatar">
+            👤
+        </div>
+
+    {% endif %}
+
+
+    <!-- THÔNG TIN -->
+
+    <div class="info">
+
+
+        <!-- HỌ VÀ TÊN -->
+
+        <div class="info-item">
+
+            <strong>
+                👤 Họ và tên
+            </strong>
+
+            <br>
+
+            <span class="info-value">
+                {% if profile.full_name %}
+                    {{ profile.full_name }}
+                {% else %}
+                    Chưa cập nhật
+                {% endif %}
+            </span>
+
+        </div>
+
+
+        <!-- NGÀY SINH -->
+
+        <div class="info-item">
+
+            <strong>
+                🎂 Ngày sinh
+            </strong>
+
+            <br>
+
+            <span class="info-value">
+
+                {% if profile.date_of_birth %}
+
+                    {{ profile.date_of_birth|date:"d/m/Y" }}
+
+                {% else %}
+
+                    Chưa cập nhật
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <!-- SỐ ĐIỆN THOẠI -->
+
+        <div class="info-item">
+
+            <strong>
+                📱 Số điện thoại
+            </strong>
+
+            <br>
+
+            <span class="info-value">
+
+                {% if profile.phone %}
+
+                    {{ profile.phone }}
+
+                {% else %}
+
+                    Chưa cập nhật
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="info-item">
+
+            <strong>
+                📧 Email
+            </strong>
+
+            <br>
+
+            <span class="info-value">
+
+                {% if profile.user.email %}
+
+                    {{ profile.user.email }}
+
+                {% else %}
+
+                    Chưa cập nhật
+
+                {% endif %}
+
+            </span>
+
+        </div>
+
+
+        <!-- TÊN ĐĂNG NHẬP -->
+
+        <div class="info-item">
+
+            <strong>
+                🔑 Tên đăng nhập
+            </strong>
+
+            <br>
+
+            <span class="info-value">
+                {{ profile.user.username }}
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BUTTON -->
+
+    <div class="button-group">
+
+        <a
+            href="{% url 'profile_edit' %}"
+            class="edit-button"
+        >
+            ✏️ Chỉnh sửa thông tin
+        </a>
+
+
+        <a
+            href="{% url 'home' %}"
+            class="back-button"
+        >
+            ← Trang chủ
+        </a>
+
+    </div>
+
+
+</div>
+
+</div>
+
+</body>
+
+</html>

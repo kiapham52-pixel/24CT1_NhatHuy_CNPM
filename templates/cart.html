@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng - MusicStore</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f7fc;
+            margin: 0;
+        }
+
+        header {
+            background: #5b2c83;
+            color: white;
+            padding: 20px 8%;
+        }
+
+        .container {
+            width: 80%;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        h1 {
+            color: #5b2c83;
+        }
+
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item img {
+            width: 150px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .cart-info h2 {
+            color: #5b2c83;
+            margin-bottom: 10px;
+        }
+
+        .price {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .total {
+            text-align: right;
+            color: #5b2c83;
+            margin-top: 30px;
+        }
+
+        /* ===== BUTTON ĐẶT HÀNG ===== */
+
+        .checkout-area {
+            text-align: right;
+            margin-top: 25px;
+        }
+
+        .checkout-btn {
+            display: inline-block;
+            background: #5b2c83;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .checkout-btn:hover {
+            background: #7d3fac;
+            transform: translateY(-2px);
+        }
+
+        .empty {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+
+        .back {
+            display: inline-block;
+            margin-top: 20px;
+            color: #5b2c83;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 90%;
+                padding: 20px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item img {
+                width: 100%;
+                height: 200px;
+            }
+
+            .checkout-area {
+                text-align: center;
+            }
+
+            .checkout-btn {
+                width: 80%;
+            }
+        }
+    </style>
+</head>
+
+
+<body>
+
+<header>
+    <h2>🎵 MusicStore</h2>
+</header>
+
+
+<div class="container">
+
+    <h1>🛒 Giỏ hàng</h1>
+
+
+    {% if products %}
+
+        {% for item in products %}
+
+            <div class="cart-item">
+
+                <img
+                    src="{{ item.product.image }}"
+                    alt="{{ item.product.name }}"
+                >
+
+                <div class="cart-info">
+
+                    <h2>
+                        {{ item.product.name }}
+                    </h2>
+
+                    <p>
+                        Danh mục:
+                        {{ item.product.category }}
+                    </p>
+
+                    <p>
+                        Giá:
+                        {{ item.product.price }} VNĐ
+                    </p>
+
+
+                    <!-- SỐ LƯỢNG -->
+
+                    <p>
+                        Số lượng:
+
+                        <a href="{% url 'decrease_cart' item.product.id %}"
+                           style="
+                               margin: 0 10px;
+                               font-size: 20px;
+                               text-decoration: none;
+                           ">
+                            ➖
+                        </a>
+
+                        <strong>
+                            {{ item.quantity }}
+                        </strong>
+
+                        <a href="{% url 'increase_cart' item.product.id %}"
+                           style="
+                               margin: 0 10px;
+                               font-size: 20px;
+                               text-decoration: none;
+                           ">
+                            ➕
+                        </a>
+                    </p>
+
+
+                    <!-- THÀNH TIỀN -->
+
+                    <p class="price">
+                        Thành tiền:
+                        {{ item.subtotal }} VNĐ
+                    </p>
+
+
+                    <!-- XÓA -->
+
+                    <a href="{% url 'remove_from_cart' item.product.id %}"
+                       style="
+                           display: inline-block;
+                           margin-top: 10px;
+                           padding: 8px 15px;
+                           background: #e74c3c;
+                           color: white;
+                           text-decoration: none;
+                           border-radius: 8px;
+                       ">
+                        🗑️ Xóa
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+        <!-- TỔNG TIỀN -->
+
+        <h2 class="total">
+            Tổng tiền: {{ total }} VNĐ
+        </h2>
+
+
+        <!-- NÚT ĐẶT HÀNG -->
+
+        <div class="checkout-area">
+
+            <a href="{% url 'checkout' %}" class="checkout-btn">
+                💳 Tiến hành đặt hàng
+            </a>
+
+        </div>
+
+
+    {% else %}
+
+        <div class="empty">
+
+            <h2>
+                Giỏ hàng đang trống 🛒
+            </h2>
+
+            <p>
+                Hãy thêm sản phẩm vào giỏ hàng nhé!
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+    <a href="/" class="back">
+        ← Tiếp tục mua sắm
+    </a>
+
+</div>
+
+</body>
+</html>

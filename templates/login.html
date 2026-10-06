@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Đăng nhập - MusicStore</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f3f8, #eee7f5);
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login-box {
+            width: 90%;
+            max-width: 430px;
+
+            background: white;
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            text-align: center;
+
+            font-size: 32px;
+
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            text-align: center;
+
+            color: #5b2c83;
+
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-weight: bold;
+
+            color: #444;
+        }
+
+        input {
+            width: 100%;
+
+            padding: 13px 15px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #5b2c83;
+
+            box-shadow: 0 0 0 3px rgba(91,44,131,0.1);
+        }
+
+        .error {
+            background: #fdeaea;
+
+            color: #e74c3c;
+
+            padding: 12px;
+
+            border-radius: 8px;
+
+            margin-bottom: 20px;
+
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #5b2c83;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #472066;
+
+            transform: translateY(-2px);
+        }
+
+        .register {
+            text-align: center;
+
+            margin-top: 22px;
+
+            color: #666;
+        }
+
+        .register a {
+            color: #5b2c83;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .back {
+            text-align: center;
+
+            margin-top: 15px;
+        }
+
+        .back a {
+            color: #777;
+
+            text-decoration: none;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="login-box">
+
+    <div class="logo">
+        🎵
+    </div>
+
+    <h1>
+        Đăng nhập
+    </h1>
+
+    {% if error %}
+
+        <div class="error">
+            {{ error }}
+        </div>
+
+    {% endif %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+
+            <label>
+                Tên đăng nhập
+            </label>
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Nhập tên đăng nhập"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Mật khẩu
+            </label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Nhập mật khẩu"
+                required
+            >
+
+        </div>
+
+
+        <button type="submit">
+            🔐 Đăng nhập
+        </button>
+
+    </form>
+
+
+    <div class="register">
+
+        Chưa có tài khoản?
+
+        <a href="{% url 'register' %}">
+            Đăng ký ngay
+        </a>
+
+    </div>
+
+
+    <div class="back">
+
+        <a href="{% url 'home' %}">
+            ← Quay về trang chủ
+        </a>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

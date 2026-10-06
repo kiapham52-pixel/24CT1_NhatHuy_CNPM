@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Thanh toán chuyển khoản - MusicStore</title>
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f8f7fc;
+        color: #333;
+    }
+
+    header {
+        background: #5b2c83;
+        color: white;
+        padding: 20px 8%;
+    }
+
+    header h2 {
+        margin: 0;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        margin: 40px auto;
+    }
+
+    .box {
+        background: white;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.08);
+        margin-bottom: 25px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #5b2c83;
+        margin-top: 0;
+    }
+
+    .success {
+        text-align: center;
+        color: #27ae60;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+
+    .order-info {
+        background: #f7f0fc;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 25px;
+    }
+
+    .order-info p {
+        margin: 8px 0;
+        font-size: 16px;
+    }
+
+    .order-info strong {
+        color: #5b2c83;
+    }
+
+    .qr-section {
+        text-align: center;
+    }
+
+    .qr-section h2 {
+        color: #5b2c83;
+        margin-bottom: 20px;
+    }
+
+    .qr-code {
+        width: 320px;
+        max-width: 100%;
+        border: 8px solid white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .amount {
+        margin-top: 20px;
+        font-size: 26px;
+        font-weight: bold;
+        color: #e74c3c;
+    }
+
+    .bank-info {
+        margin-top: 30px;
+        background: #fafafa;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .bank-info h2 {
+        background: #5b2c83;
+        color: white;
+        padding: 15px 20px;
+        margin: 0;
+        font-size: 20px;
+    }
+
+    .bank-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .bank-row:last-child {
+        border-bottom: none;
+    }
+
+    .bank-label {
+        font-weight: bold;
+        color: #555;
+    }
+
+    .bank-value {
+        color: #5b2c83;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .note {
+        margin-top: 25px;
+        padding: 18px;
+        background: #fff8e6;
+        border-left: 5px solid #f1c40f;
+        border-radius: 8px;
+        line-height: 1.6;
+    }
+
+    .note strong {
+        color: #d68910;
+    }
+
+    .buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+    }
+
+    .btn {
+        flex: 1;
+        padding: 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        text-align: center;
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .btn-home {
+        background: #5b2c83;
+        color: white;
+    }
+
+    .btn-home:hover {
+        background: #472066;
+    }
+
+    .btn-orders {
+        background: #eee;
+        color: #5b2c83;
+    }
+
+    .btn-orders:hover {
+        background: #ddd;
+    }
+
+    @media (max-width: 600px) {
+
+        .container {
+            width: 95%;
+            margin: 20px auto;
+        }
+
+        .box {
+            padding: 20px;
+        }
+
+        .bank-row {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .bank-value {
+            text-align: left;
+        }
+
+        .buttons {
+            flex-direction: column;
+        }
+
+        .amount {
+            font-size: 22px;
+        }
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+<header>
+
+```
+<h2>🎵 MusicStore</h2>
+```
+
+</header>
+
+<div class="container">
+
+```
+<div class="box">
+
+    <h1>
+        🏦 Thanh toán chuyển khoản
+    </h1>
+
+
+    <div class="success">
+
+        ✅ Đơn hàng đã được tạo thành công!
+
+    </div>
+
+
+    <!-- THÔNG TIN ĐƠN HÀNG -->
+
+    <div class="order-info">
+
+        <p>
+            <strong>Mã đơn hàng:</strong>
+            #{{ order.id }}
+        </p>
+
+        <p>
+            <strong>Khách hàng:</strong>
+            {{ order.customer_name }}
+        </p>
+
+        <p>
+            <strong>Số điện thoại:</strong>
+            {{ order.phone }}
+        </p>
+
+    </div>
+
+
+    <!-- QR CODE -->
+
+    <div class="qr-section">
+
+        <h2>
+            📱 Quét mã QR để thanh toán
+        </h2>
+
+
+        <img
+            src="{{ qr_url }}"
+            alt="QR thanh toán MusicStore"
+            class="qr-code"
+        >
+
+
+        <div class="amount">
+
+            {{ total }} VNĐ
+
+        </div>
+
+    </div>
+
+
+
+    <!-- THÔNG TIN NGÂN HÀNG -->
+
+    <div class="bank-info">
+
+        <h2>
+            🏦 Thông tin chuyển khoản
+        </h2>
+
+
+        <div class="bank-row">
+
+            <span class="bank-label">
+                Ngân hàng
+            </span>
+
+            <span class="bank-value">
+                {{ bank_id }}
+            </span>
+
+        </div>
+
+
+        <div class="bank-row">
+
+            <span class="bank-label">
+                Số tài khoản
+            </span>
+
+            <span class="bank-value">
+                {{ account_no }}
+            </span>
+
+        </div>
+
+
+        <div class="bank-row">
+
+            <span class="bank-label">
+                Chủ tài khoản
+            </span>
+
+            <span class="bank-value">
+                {{ account_name }}
+            </span>
+
+        </div>
+
+
+        <div class="bank-row">
+
+            <span class="bank-label">
+                Số tiền
+            </span>
+
+            <span class="bank-value">
+                {{ total }} VNĐ
+            </span>
+
+        </div>
+
+
+        <div class="bank-row">
+
+            <span class="bank-label">
+                Nội dung chuyển khoản
+            </span>
+
+            <span class="bank-value">
+                {{ transfer_content }}
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LƯU Ý -->
+
+    <div class="note">
+
+        ⚠️ <strong>Lưu ý:</strong>
+
+        <br>
+
+        Vui lòng chuyển khoản đúng số tiền và nhập đúng
+        nội dung chuyển khoản để hệ thống dễ dàng
+        xác định đơn hàng của bạn.
+
+        <br><br>
+
+        Sau khi chuyển khoản thành công, bạn có thể
+        giữ lại thông tin giao dịch để đối chiếu.
+
+    </div>
+
+
+
+    <!-- BUTTON -->
+
+    <div class="buttons">
+
+        <a
+            href="{% url 'home' %}"
+            class="btn btn-home"
+        >
+            🏠 Về trang chủ
+        </a>
+
+
+        <a
+            href="{% url 'order_list' %}"
+            class="btn btn-orders"
+        >
+            📦 Xem đơn hàng
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

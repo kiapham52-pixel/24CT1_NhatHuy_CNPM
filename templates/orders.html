@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đơn hàng của tôi - MusicStore</title>
+    <style>
+        :root {
+            --ink: #18232f;
+            --muted: #687582;
+            --line: #e6ebef;
+            --brand: #0e7490;
+            --brand-dark: #155e75;
+            --paper: #ffffff;
+            --page: #f3f7f8;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: var(--page);
+            font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+        }
+        a { color: inherit; }
+        .site-header {
+            background: #123047;
+            color: #fff;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+        .brand { font-size: 24px; font-weight: 800; text-decoration: none; letter-spacing: .2px; }
+        .main-nav { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .main-nav a { padding: 9px 13px; border-radius: 7px; text-decoration: none; font-size: 14px; }
+        .main-nav a:hover { background: rgba(255,255,255,.13); }
+        .page { width: min(1120px, 88%); margin: 38px auto 64px; }
+        .page-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 22px; }
+        h1 { margin: 0; font-size: clamp(26px, 4vw, 36px); }
+        .intro { margin: 7px 0 0; color: var(--muted); }
+        .filter-bar {
+            display: flex; gap: 8px; overflow-x: auto; padding: 5px 0 18px;
+            scrollbar-width: thin;
+        }
+        .filter-button {
+            flex: 0 0 auto; border: 1px solid var(--line); background: var(--paper); color: #465564;
+            padding: 10px 15px; border-radius: 7px; cursor: pointer; font: inherit; font-size: 14px;
+        }
+        .filter-button:hover, .filter-button.active { color: #fff; background: var(--brand); border-color: var(--brand); }
+        .order-card {
+            background: var(--paper); border: 1px solid #e4eaed; border-radius: 12px;
+            margin: 0 0 18px; box-shadow: 0 5px 18px rgba(24, 50, 67, .06); overflow: hidden;
+        }
+        .order-head { padding: 18px 22px; display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--line); }
+        .order-number { font-weight: 800; font-size: 17px; }
+        .order-date { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; }
+        .status { padding: 7px 11px; border-radius: 5px; font-weight: 700; font-size: 13px; white-space: nowrap; }
+        .status.pending { color: #9a5a00; background: #fff3d1; }
+        .status.confirmed { color: #1769aa; background: #e0f0ff; }
+        .status.shipping { color: #5b3ca4; background: #eee8ff; }
+        .status.completed { color: #237542; background: #e2f6e8; }
+        .status.cancelled { color: #b4232d; background: #ffe5e7; }
+        .items { padding: 4px 22px; }
+        .item-row { display: flex; align-items: center; gap: 15px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+        .item-row:last-child { border-bottom: 0; }
+        .product-image { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; background: #edf2f3; flex: 0 0 72px; }
+        .product-copy { min-width: 0; flex: 1; }
+        .product-name { margin: 0 0 8px; font-weight: 700; overflow-wrap: anywhere; }
+        .product-meta { color: var(--muted); font-size: 14px; }
+        .product-price { color: var(--brand-dark); font-weight: 800; white-space: nowrap; }
+        .order-info { padding: 16px 22px; color: #52616d; font-size: 14px; line-height: 1.75; background: #fbfcfc; }
+        .order-info strong { color: var(--ink); }
+        .order-foot { padding: 17px 22px; display: flex; justify-content: space-between; align-items: center; gap: 18px; border-top: 1px solid var(--line); }
+        .total-label { color: var(--muted); font-size: 14px; }
+        .total { display: block; color: #c2410c; font-size: 21px; margin-top: 3px; }
+        .detail-button, .shop-button { display: inline-block; border-radius: 7px; padding: 11px 15px; text-decoration: none; font-weight: 700; font-size: 14px; }
+        .detail-button { color: #fff; background: var(--brand); }
+        .detail-button:hover { background: var(--brand-dark); }
+        .shop-button { margin-left: 7px; color: var(--brand-dark); border: 1px solid #a9cbd2; }
+        .empty { padding: 56px 20px; text-align: center; background: var(--paper); border-radius: 12px; border: 1px solid var(--line); }
+        .empty-icon { font-size: 42px; }
+        .empty h2 { margin: 13px 0 6px; }
+        .empty p { color: var(--muted); }
+        .empty a { display: inline-block; margin-top: 14px; padding: 11px 16px; color: #fff; background: var(--brand); border-radius: 7px; text-decoration: none; font-weight: 700; }
+        @media (max-width: 640px) {
+            .site-header { align-items: flex-start; flex-direction: column; padding: 16px 6%; }
+            .main-nav { width: 100%; gap: 3px; }
+            .main-nav a { padding: 7px 9px; }
+            .page { width: 92%; margin-top: 27px; }
+            .page-heading { display: block; }
+            .order-head, .order-foot { align-items: flex-start; flex-direction: column; }
+            .order-head, .items, .order-info, .order-foot { padding-left: 16px; padding-right: 16px; }
+            .item-row { align-items: flex-start; }
+            .product-image { width: 60px; height: 60px; flex-basis: 60px; }
+            .product-price { font-size: 14px; }
+            .detail-button, .shop-button { margin: 0 5px 0 0; }
+        }
+    </style>
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="{% url 'home' %}">🎵 MusicStore</a>
+        <nav class="main-nav" aria-label="Điều hướng chính">
+            <a href="{% url 'home' %}">🏠 Trang chủ</a>
+            <a href="{% url 'cart' %}">🛒 Giỏ hàng</a>
+            <a href="{% url 'logout' %}">🚪 Đăng xuất</a>
+        </nav>
+    </header>
+
+    <main class="page">
+        <div class="page-heading">
+            <div>
+                <h1>📦 Đơn hàng của tôi</h1>
+                <p class="intro">Theo dõi hành trình những món nhạc cụ bạn đã chọn.</p>
+            </div>
+        </div>
+
+        <div class="filter-bar" role="tablist" aria-label="Lọc theo trạng thái">
+            <button class="filter-button active" type="button" data-filter="all">Tất cả</button>
+            <button class="filter-button" type="button" data-filter="pending">Chờ xác nhận</button>
+            <button class="filter-button" type="button" data-filter="confirmed">Đã xác nhận</button>
+            <button class="filter-button" type="button" data-filter="shipping">Đang giao</button>
+            <button class="filter-button" type="button" data-filter="completed">Đã giao</button>
+            <button class="filter-button" type="button" data-filter="cancelled">Đã hủy</button>
+        </div>
+
+        {% if orders %}
+            <div id="order-list">
+                {% for order in orders %}
+                    <article class="order-card" data-status="{{ order.status }}">
+                        <div class="order-head">
+                            <div>
+                                <div class="order-number">Đơn hàng #{{ order.id }}</div>
+                                <span class="order-date">Đặt ngày {{ order.created_at|date:"d/m/Y H:i" }}</span>
+                            </div>
+                            <span class="status {{ order.status }}">{{ order.get_status_display }}</span>
+                        </div>
+
+                        <div class="items">
+                            {% for item in order.items.all %}
+                                <div class="item-row">
+                                    {% if item.product.image %}
+                                        <img class="product-image" src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                                    {% else %}
+                                        <div class="product-image" aria-label="Chưa có ảnh sản phẩm"></div>
+                                    {% endif %}
+                                    <div class="product-copy">
+                                        <p class="product-name">{{ item.product.name }}</p>
+                                        <div class="product-meta">Số lượng: {{ item.quantity }} · {{ item.subtotal|floatformat:0 }} VNĐ</div>
+                                    </div>
+                                    <div class="product-price">{{ item.price|floatformat:0 }} VNĐ</div>
+                                </div>
+                            {% empty %}
+                                <p class="product-meta">Đơn hàng chưa có sản phẩm.</p>
+                            {% endfor %}
+                        </div>
+
+                        <div class="order-info">
+                            <div><strong>Người nhận:</strong> {{ order.customer_name }}</div>
+                            <div><strong>Số điện thoại:</strong> {{ order.phone }}</div>
+                            <div><strong>Địa chỉ:</strong> {{ order.address }}</div>
+                        </div>
+
+                        <div class="order-foot">
+                            <div>
+                                <span class="total-label">Tổng tiền</span>
+                                <strong class="total">{{ order.total|floatformat:0 }} VNĐ</strong>
+                            </div>
+                            <div>
+                                <a class="detail-button" href="{% url 'order_detail' order.id %}">👁 Xem chi tiết</a>
+                                {% if order.status == 'completed' %}
+                                    <a class="shop-button" href="{% url 'home' %}">🛍 Mua lại</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+            <p id="no-filter-results" class="empty" hidden>Không có đơn hàng ở trạng thái này.</p>
+        {% else %}
+            <section class="empty">
+                <div class="empty-icon">📦</div>
+                <h2>Chưa có đơn hàng</h2>
+                <p>Bạn chưa đặt sản phẩm nào.</p>
+                <a href="{% url 'home' %}">🛍 Mua sắm ngay</a>
+            </section>
+        {% endif %}
+    </main>
+
+    <script>
+        const filterButtons = document.querySelectorAll('[data-filter]');
+        const orderCards = document.querySelectorAll('.order-card');
+        const noResults = document.getElementById('no-filter-results');
+
+        filterButtons.forEach((button) => {
+            button.addEventListener('click', () => {
+                const filter = button.dataset.filter;
+                let visibleOrders = 0;
+                filterButtons.forEach((item) => item.classList.toggle('active', item === button));
+                orderCards.forEach((card) => {
+                    const visible = filter === 'all' || card.dataset.status === filter;
+                    card.hidden = !visible;
+                    if (visible) visibleOrders += 1;
+                });
+                if (noResults) noResults.hidden = visibleOrders !== 0;
+            });
+        });
+    </script>
+</body>
+</html>

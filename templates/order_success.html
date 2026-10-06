@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Đặt hàng thành công - MusicStore</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(
+                135deg,
+                #f5f3f8,
+                #eee7f5
+            );
+            color: #333;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+            background: #5b2c83;
+            color: white;
+            padding: 20px 8%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.12);
+        }
+
+        header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .user {
+            font-size: 14px;
+            opacity: 0.95;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 60px auto;
+        }
+
+
+        /* =========================
+           SUCCESS BOX
+        ========================= */
+
+        .success-box {
+            background: white;
+
+            border-radius: 24px;
+
+            padding: 50px 45px;
+
+            text-align: center;
+
+            box-shadow:
+                0 15px 40px rgba(91, 44, 131, 0.12);
+
+            animation: fadeIn 0.5s ease;
+        }
+
+
+        /* =========================
+           ICON
+        ========================= */
+
+        .icon {
+            width: 100px;
+            height: 100px;
+
+            margin: 0 auto 25px;
+
+            background: #e8f8ef;
+
+            border-radius: 50%;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 55px;
+
+            box-shadow:
+                0 8px 20px rgba(39, 174, 96, 0.15);
+        }
+
+
+        /* =========================
+           TITLE
+        ========================= */
+
+        h1 {
+            color: #27ae60;
+
+            margin: 0 0 12px;
+
+            font-size: 32px;
+        }
+
+        .message {
+            color: #666;
+
+            font-size: 17px;
+
+            line-height: 1.6;
+
+            margin-bottom: 30px;
+        }
+
+
+        /* =========================
+           ORDER INFO
+        ========================= */
+
+        .order-info {
+            background: #faf8fc;
+
+            border: 1px solid #eee5f5;
+
+            border-radius: 16px;
+
+            padding: 25px 30px;
+
+            text-align: left;
+
+            margin-bottom: 30px;
+        }
+
+        .order-info p {
+            margin: 14px 0;
+
+            font-size: 16px;
+
+            line-height: 1.5;
+        }
+
+        .order-info strong {
+            color: #5b2c83;
+        }
+
+
+        /* =========================
+           TOTAL
+        ========================= */
+
+        .total {
+            color: #e74c3c;
+
+            font-size: 22px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            display: inline-block;
+
+            padding: 7px 15px;
+
+            border-radius: 20px;
+
+            background: #f59e0b;
+
+            color: white;
+
+            font-weight: bold;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .buttons {
+            display: flex;
+
+            justify-content: center;
+
+            gap: 12px;
+
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-block;
+
+            padding: 14px 25px;
+
+            background: #5b2c83;
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #472066;
+
+            transform: translateY(-2px);
+        }
+
+        .btn-orders {
+            background: #3498db;
+        }
+
+        .btn-orders:hover {
+            background: #2980b9;
+        }
+
+        .btn-home {
+            background: #27ae60;
+        }
+
+        .btn-home:hover {
+            background: #219150;
+        }
+
+
+        /* =========================
+           ANIMATION
+        ========================= */
+
+        @keyframes fadeIn {
+
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            header {
+                padding: 18px 5%;
+            }
+
+            header h2 {
+                font-size: 20px;
+            }
+
+            .container {
+                margin: 30px auto;
+            }
+
+            .success-box {
+                padding: 35px 20px;
+            }
+
+            h1 {
+                font-size: 26px;
+            }
+
+            .order-info {
+                padding: 20px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <h2>
+        🎵 MusicStore
+    </h2>
+
+    {% if user.is_authenticated %}
+
+        <div class="user">
+            👋 Xin chào,
+            <strong>{{ user.username }}</strong>
+        </div>
+
+    {% endif %}
+
+</header>
+
+
+<!-- =========================
+     CONTENT
+========================= -->
+
+<div class="container">
+
+    <div class="success-box">
+
+
+        <!-- ICON -->
+
+        <div class="icon">
+            ✅
+        </div>
+
+
+        <!-- TITLE -->
+
+        <h1>
+            Đặt hàng thành công!
+        </h1>
+
+
+        <p class="message">
+
+            Cảm ơn bạn đã mua hàng tại
+            <strong>MusicStore</strong> 🎵
+
+            <br>
+
+            Đơn hàng của bạn đã được tiếp nhận
+            và đang chờ xác nhận.
+
+        </p>
+
+
+        <!-- ORDER INFO -->
+
+        <div class="order-info">
+
+
+            <p>
+
+                📋 Mã đơn hàng:
+
+                <strong>
+                    #{{ order.id }}
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                👤 Người nhận:
+
+                <strong>
+                    {{ order.customer_name }}
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                📞 Số điện thoại:
+
+                <strong>
+                    {{ order.phone }}
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                📍 Địa chỉ:
+
+                <strong>
+                    {{ order.address }}
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                📦 Trạng thái:
+
+                {% if order.status == 'pending' %}
+
+                    <span class="status">
+                        🟡 Chờ xác nhận
+                    </span>
+
+                {% elif order.status == 'confirmed' %}
+
+                    <span class="status"
+                          style="background:#3b82f6;">
+                        🔵 Đã xác nhận
+                    </span>
+
+                {% elif order.status == 'shipping' %}
+
+                    <span class="status"
+                          style="background:#8b5cf6;">
+                        🟣 Đang giao
+                    </span>
+
+                {% elif order.status == 'completed' %}
+
+                    <span class="status"
+                          style="background:#22c55e;">
+                        🟢 Đã giao
+                    </span>
+
+                {% elif order.status == 'cancelled' %}
+
+                    <span class="status"
+                          style="background:#ef4444;">
+                        🔴 Đã hủy
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+
+            <p>
+
+                💰 Tổng tiền:
+
+                <span class="total">
+
+                    {{ order.total|floatformat:0 }} VNĐ
+
+                </span>
+
+            </p>
+
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+
+            <a
+                href="{% url 'order_list' %}"
+                class="btn btn-orders"
+            >
+
+                📦 Đơn hàng của tôi
+
+            </a>
+
+
+            <a
+                href="{% url 'home' %}"
+                class="btn btn-home"
+            >
+
+                🏠 Về trang chủ
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+</body>
+
+</html>
