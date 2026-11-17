@@ -1,14 +1,13 @@
-from django.db import transaction
+﻿from django.db import transaction
 from django.db.models import Count, Q
 from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
-from .models import Product, Order, OrderItem, Profile
 
 from .forms import RegisterForm,ProfileForm
+from .roles import CUSTOMER_GROUP, assign_user_role
 
 from .models import (
     Product,
@@ -617,30 +616,19 @@ def register(request):
             # TẠO USER
             # =============================================
 
-            user = form.save()
+            with transaction.atomic():
+                user = form.save()
+                user.is_staff = False
+                user.is_superuser = False
+                user.save(update_fields=['is_staff', 'is_superuser'])
+                assign_user_role(user, is_staff=False)
 
-
-            # =============================================
-            # TẠO PROFILE
-            # =============================================
-
-            Profile.objects.create(
-
-                user=user,
-
-                full_name=form.cleaned_data[
-                    'full_name'
-                ],
-
-                date_of_birth=form.cleaned_data[
-                    'date_of_birth'
-                ],
-
-                avatar=form.cleaned_data.get(
-                    'avatar'
+                Profile.objects.create(
+                    user=user,
+                    full_name=form.cleaned_data['full_name'],
+                    date_of_birth=form.cleaned_data['date_of_birth'],
+                    avatar=form.cleaned_data.get('avatar'),
                 )
-
-            )
 
 
             # =============================================
@@ -684,135 +672,38 @@ def register(request):
 
 def login_view(request):
 
-    # -----------------------------------------------------
-    # NẾU ĐÃ ĐĂNG NHẬP
-    # -----------------------------------------------------
-
     if request.user.is_authenticated:
-
         return redirect('home')
 
-
-    # -----------------------------------------------------
-    # SUBMIT FORM
-    # -----------------------------------------------------
-
     if request.method == 'POST':
-
-        username = request.POST.get(
-            'username',
-            ''
-        ).strip()
-
-        password = request.POST.get(
-            'password',
-            ''
-        )
-
-
-        # -------------------------------------------------
-        # XÁC THỰC TÀI KHOẢN
-        # -------------------------------------------------
+        username = request.POST.get('username', '').strip()
+        password = request.POST.get('password', '')
 
         user = authenticate(
-
             request,
-
             username=username,
-
-            password=password
-
+            password=password,
         )
 
-
-        # -------------------------------------------------
-        # ĐĂNG NHẬP THÀNH CÔNG
-        # -------------------------------------------------
-
         if user is not None:
-
-            login(
-                request,
-                user
-            )
-
+            login(request, user)
             return redirect('home')
-
-
-        # -------------------------------------------------
-        # ĐĂNG NHẬP THẤT BẠI
-        # -------------------------------------------------
 
         return render(
             request,
             'login.html',
             {
-                'error':
-                    'Tên đăng nhập hoặc mật khẩu không đúng!'
+                'error': 'Tên đăng nhập hoặc mật khẩu không đúng!'
             }
         )
 
-
-    # -----------------------------------------------------
-    # HIỂN THỊ LOGIN
-    # -----------------------------------------------------
-
-    return render(
-        request,
-        'login.html'
-    )
-
-
-# =========================================================
-# ĐĂNG XUẤT
-# =========================================================
+    return render(request, 'login.html')
 
 def logout_view(request):
 
     logout(request)
 
     return redirect('home')
-
-@login_required
-def profile(request):
-
-    profile, created = Profile.objects.get_or_create(
-        user=request.user,
-        defaults={
-            'full_name': request.user.username,
-        }
-    )
-
-    return render(
-        request,
-        'profile.html',
-        {
-            'profile': profile
-        }
-    )
-
-@login_required 
-def profile(request): 
- 
-    profile, created = Profile.objects.get_or_create( 
-        user=request.user, 
-        defaults={ 
-            'full_name': request.user.username, 
-        } 
-    ) 
- 
-    return render( 
-        request, 
-        'profile.html', 
-        { 
-            'profile': profile 
-        } 
-    )
-
-
-# =========================================================
-# THÔNG TIN KHÁCH HÀNG
-# =========================================================
 
 @login_required
 def profile(request):

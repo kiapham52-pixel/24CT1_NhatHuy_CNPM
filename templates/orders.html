@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -98,13 +99,20 @@
             .detail-button, .shop-button { margin: 0 5px 0 0; }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'store/background.css' %}?v=logo-double-5">
 </head>
 <body>
     <header class="site-header">
-        <a class="brand" href="{% url 'home' %}">🎵 MusicStore</a>
+        <a class="brand store-brand" href="{% url 'home' %}">
+            <img src="{% static 'store/images/logo.png' %}" width="28" height="28" alt="" aria-hidden="true">
+            <span>MusicStore</span>
+        </a>
         <nav class="main-nav" aria-label="Điều hướng chính">
             <a href="{% url 'home' %}">🏠 Trang chủ</a>
             <a href="{% url 'cart' %}">🛒 Giỏ hàng</a>
+            {% if user.is_staff %}
+                <a href="/admin/">Quản trị</a>
+            {% endif %}
             <a href="{% url 'logout' %}">🚪 Đăng xuất</a>
         </nav>
     </header>

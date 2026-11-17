@@ -1,5 +1,9 @@
 db.sqlite3
 db.sqlite3-journal
+MusicStoreDB.sqlite3
+MusicStoreDB.sqlite3-journal
+MusicStoreDB.sqlite3-wal
+MusicStoreDB.sqlite3-shm
 media/
 __pycache__/
 *.py[cod]

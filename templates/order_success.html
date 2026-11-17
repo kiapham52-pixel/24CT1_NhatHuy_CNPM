@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -316,6 +317,7 @@
 
     </style>
 
+    <link rel="stylesheet" href="{% static 'store/background.css' %}?v=logo-double-5">
 </head>
 
 
@@ -329,7 +331,10 @@
 <header>
 
     <h2>
-        🎵 MusicStore
+        <a class="store-brand" href="{% url 'home' %}">
+            <img src="{% static 'store/images/logo.png' %}" width="28" height="28" alt="" aria-hidden="true">
+            <span>MusicStore</span>
+        </a>
     </h2>
 
     {% if user.is_authenticated %}

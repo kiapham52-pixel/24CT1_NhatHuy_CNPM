@@ -1,3 +1,4 @@
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -210,6 +211,7 @@
 
     </style>
 
+    <link rel="stylesheet" href="{% static 'store/background.css' %}?v=logo-double-5">
 </head>
 
 
@@ -218,10 +220,18 @@
 
 <div class="register-box">
 
+    <div class="auth-logo">
+        <img
+            src="{% static 'store/images/logo.png' %}"
+            width="44"
+            height="44"
+            alt="Logo Trường Đại học Kiến trúc Đà Nẵng"
+        >
+    </div>
 
     <div class="title">
 
-        <h1>🎵 MusicStore</h1>
+        <h1>Đăng ký</h1>
 
         <p>Tạo tài khoản mới</p>
 
@@ -283,7 +293,7 @@
         <div class="form-group">
 
             <label>
-                📧 Email
+                 Email
             </label>
 
             {{ form.email }}
@@ -396,7 +406,7 @@
             type="submit"
             class="register-button"
         >
-            🚀 Đăng ký tài khoản
+             Đăng ký tài khoản
         </button>
 
 

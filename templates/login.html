@@ -1,3 +1,4 @@
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -38,18 +39,12 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.12);
         }
 
-        .logo {
-            text-align: center;
-
-            font-size: 32px;
-
-            margin-bottom: 10px;
-        }
-
         h1 {
             text-align: center;
 
             color: #5b2c83;
+
+            margin-top: 0;
 
             margin-bottom: 30px;
         }
@@ -160,6 +155,7 @@
 
     </style>
 
+    <link rel="stylesheet" href="{% static 'store/background.css' %}?v=logo-double-5">
 </head>
 
 
@@ -167,8 +163,13 @@
 
 <div class="login-box">
 
-    <div class="logo">
-        🎵
+    <div class="auth-logo">
+        <img
+            src="{% static 'store/images/logo.png' %}"
+            width="44"
+            height="44"
+            alt="Logo Trường Đại học Kiến trúc Đà Nẵng"
+        >
     </div>
 
     <h1>
@@ -220,7 +221,7 @@
 
 
         <button type="submit">
-            🔐 Đăng nhập
+             Đăng nhập
         </button>
 
     </form>

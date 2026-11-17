@@ -19,11 +19,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY
 # =========================================================
 
-SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
+SECRET_KEY = os.environ.get(
+    'DJANGO_SECRET_KEY',
+    'dev-only-secret-key-for-local-development'
+)
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # =========================================================
@@ -121,10 +124,10 @@ DATABASES = {
     'default': {
 
         'ENGINE':
-            'django.db.backends.sqlite3',
+            'config.db.backends.sqlite3',
 
         'NAME':
-            BASE_DIR / 'db.sqlite3',
+            BASE_DIR / 'MusicStoreDB.sqlite3',
 
     }
 

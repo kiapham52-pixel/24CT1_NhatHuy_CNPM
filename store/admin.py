@@ -5,6 +5,7 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.html import format_html
 
 from .models import Product, Order, OrderItem, Profile
+from .roles import ADMIN_GROUP, assign_user_role
 
 
 # =========================================================
@@ -17,6 +18,7 @@ class CustomUserAdmin(UserAdmin):
         'id',
         'username',
         'email',
+        'role',
         'date_joined',
         'last_login',
         'is_active',
@@ -25,6 +27,7 @@ class CustomUserAdmin(UserAdmin):
     list_filter = (
         'is_active',
         'is_staff',
+        'groups',
         'date_joined',
     )
 
@@ -43,6 +46,48 @@ class CustomUserAdmin(UserAdmin):
         'date_joined',
         'last_login',
     )
+
+    def get_queryset(self, request):
+        queryset = super().get_queryset(request)
+        if not request.user.is_superuser:
+            queryset = queryset.filter(
+                is_staff=False,
+                is_superuser=False,
+            )
+        return queryset
+
+    def get_fieldsets(self, request, obj=None):
+        if request.user.is_superuser:
+            return super().get_fieldsets(request, obj)
+        if obj is None:
+            return self.add_fieldsets
+        return (
+            (None, {'fields': ('username', 'password')}),
+            ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+            ('Account status', {'fields': ('is_active',)}),
+        )
+
+    def save_model(self, request, obj, form, change):
+        if not request.user.is_superuser:
+            obj.is_staff = False
+            obj.is_superuser = False
+        super().save_model(request, obj, form, change)
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        assign_user_role(form.instance, is_staff=(
+            form.instance.is_staff or form.instance.is_superuser
+        ))
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser and super().has_delete_permission(
+            request,
+            obj,
+        )
+
+    @admin.display(description='Vai trò')
+    def role(self, obj):
+        return ADMIN_GROUP if obj.is_staff or obj.is_superuser else 'CUSTOMER'
 
 
 # Django đã đăng ký User mặc định

@@ -1,3 +1,4 @@
+﻿{% load static %}
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -582,6 +583,7 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="{% static 'store/background.css' %}?v=logo-double-5">
 </head>
 
 <body>
@@ -590,8 +592,15 @@
 
         <div class="header-inner">
 
-            <a class="logo" href="{% url 'home' %}">
-                🎵 MusicStore
+            <a class="logo store-brand" href="{% url 'home' %}">
+                <img
+                    src="{% static 'store/images/logo.png' %}"
+                    width="28"
+                    height="28"
+                    alt=""
+                    aria-hidden="true"
+                >
+                <span>MusicStore</span>
             </a>
 
             <button
@@ -650,6 +659,12 @@
                 </a>
 
                 {% if user.is_authenticated %}
+
+                    {% if user.is_staff %}
+                        <a class="optional" href="/admin/">
+                            Quản trị
+                        </a>
+                    {% endif %}
 
                     <a
                         class="optional"
@@ -948,7 +963,7 @@
                     {% empty %}
 
                         <div class="empty">
-                            🎵 Không tìm thấy sản phẩm phù hợp.
+                            MusicStore Không tìm thấy sản phẩm phù hợp.
                         </div>
 
                     {% endfor %}
@@ -1094,7 +1109,7 @@
             <div>
 
                 <h3>
-                    🎵 MusicStore
+                    MusicStore
                 </h3>
 
                 <p>
